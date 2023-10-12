@@ -6,7 +6,7 @@ show_pages(
         [
             Page("pages/home.py", "Accueil", "🏠"),
             Page("pages/analyse.py", "Analyse", "📈"),
-            Page("pages/cartographie.py", "Cartographie des prix par arrondissement", "🌍️"),
+            Page("pages/cartographie.py", "Prix par arrondissement", "🌍️"),
         ]
     )
 

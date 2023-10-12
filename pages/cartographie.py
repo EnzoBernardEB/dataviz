@@ -24,8 +24,8 @@ def display_map(neighbourhood_group=None):
     else:
         filtered_df = df
 
-    # Définition des tranches de prix
-    price_bins = [0, 500, 1000, 1500, 2500, 5000, 7500, 10000, np.inf]
+    # Définition des tranches de prix modifiées
+    price_bins = [0, 100, 500, 1000, 2000, 5000, 10000, np.inf]
 
     # Création d'une palette de couleurs évoluant du vert (bas prix) au rouge (prix élevés)
     colormap = plt.get_cmap('YlOrRd')
@@ -43,13 +43,22 @@ def display_map(neighbourhood_group=None):
 
         # Ajout des logements sur la carte avec la couleur correspondante
         for _, row in filtered_price_df.iterrows():
+            popup_text = f"""
+            <strong>Nom:</strong> {row['name']}<br>
+            <strong>Prix:</strong> ${row['price']}<br>
+            <strong>Quartier:</strong> {row['neighbourhood']}<br>
+            <strong>Type de chambre:</strong> {row['room_type']}
+            """
+            popup = folium.Popup(popup_text,max_width=2650)
+
             folium.CircleMarker(
                 location=(row['latitude'], row['longitude']),
                 radius=3,
                 color=mpl.colors.to_hex(color),
                 fill=True,
                 fill_color=mpl.colors.to_hex(color),
-                fill_opacity=0.6
+                fill_opacity=0.6,
+                popup=popup
             ).add_to(m)
 
         # Ajout de la tranche de prix à la légende
@@ -64,6 +73,7 @@ def display_map(neighbourhood_group=None):
         st.sidebar.markdown(
             f"Prix entre ${min_price} et ${max_price}: <div style='background-color: {mpl.colors.to_hex(color)}; display: inline-block; width: 15px; height: 15px;'></div>",
             unsafe_allow_html=True)
+
 
 # Widget de sélection du quartier
 selected_neighbourhood_group = st.sidebar.selectbox("Sélectionnez un quartier", df['neighbourhood_group'].unique())
