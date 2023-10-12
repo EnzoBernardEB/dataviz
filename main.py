@@ -5,7 +5,7 @@ st.set_page_config(layout="wide")
 show_pages(
         [
             Page("pages/home.py", "Accueil", "🏠"),
-            Page("pages/analyse.py", "Analyse", "📈"),
+            Page("pages/analyse.py", "Traffic", "🌍️"),
             Page("pages/cartographie.py", "Prix par arrondissement", "🌍️"),
         ]
     )
