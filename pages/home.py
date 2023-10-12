@@ -1,6 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import plotly.express as px
 from database.data_loader import df
 
 
@@ -15,7 +16,7 @@ st.markdown("""
 
 st.markdown("<h1 style='text-align: center;'>Statistiques Airbnb concernant la ville de New York pour l’année 2019</h1>", unsafe_allow_html=True)
 # Affichage du titre
-st.title("Analyse des données Airbnb de New York pour 2019")
+
 # Métriques
 col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
 logement_reserves = (df['availability_365'] <= 15).sum()
@@ -34,51 +35,37 @@ with col3:
 with col4:
     st.metric(label="Somme totale dépensée", value=formatted_total)
 
+
 # Graphique
+# Affichage du titre
+st.markdown("""
+<style>
+    .reportview-container .main .block-container {
+        max-width: 100%;
+    }
+    .header-margin {
+        margin-top: 5rem;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("<h2 class='header-margin' style='text-align: center;'>Type de logements par arrondissement</h2>", unsafe_allow_html=True)
+# Affichage du titre
+
+# Group by 'neighbourhood_group', 'neighbourhood', and 'room_type' 
+# Calculate the average price and count the number of occurrences for each group
+grouped = df.groupby(['neighbourhood_group', 'neighbourhood', 'room_type']).agg(avg_price=('price', 'mean'), count=('room_type', 'size')).reset_index()
+
+fig = px.treemap(grouped, 
+                path=['neighbourhood_group', 'neighbourhood', 'room_type'], 
+                values='count',
+                hover_data=['avg_price'])
+
+# Customizing hover template
+fig.update_traces(hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Avg Price: %{customdata[0]:.1f}$')
+
+st.plotly_chart(fig, use_container_width=True)
 
 
 
 
-
-
-
-
-
-
-
-# TEST
-def create_gauge_chart(value, title, color='green'):
-    """Créer un graphique jauge avec Plotly."""
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=value,
-        title={'text': title, 'font': {'color': 'black'}},
-        number={'font': {'color': color}},
-        gauge={'axis': {'range': [None, 100]}, 'bar': {'color': color}}
-    ))
-    return fig
-
-# Simuler un KPI - Taux d'occupation moyen (en pourcentage)
-occupancy_rate = 72.5
-fig = create_gauge_chart(occupancy_rate, "Taux d'occupation (%)", color='green')
-
-st.plotly_chart(fig)
-# TEST
-
-
-
-
-fig, ax = plt.subplots(figsize=(8, 4))
-colors = ['#0173B2', '#DE8F05', '#029E73', '#D55E00', '#CC78BC']
-sorted_neighbourhoods = df.groupby('neighbourhood_group')['neighbourhood'].nunique().sort_values()
-
-sorted_neighbourhoods.plot(kind='barh', ax=ax, color=colors)
-
-for index, value in enumerate(sorted_neighbourhoods):
-    ax.text(value, index, ' ' + str(value), va='center', color='black', fontweight='bold')
-
-ax.set_title("Nombre de quartiers par groupe")
-ax.set_xlabel("Nombre de quartiers")
-ax.set_ylabel("Groupe de quartiers")
-
-st.pyplot(fig)
