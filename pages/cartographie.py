@@ -76,7 +76,7 @@ def display_map(neighbourhood_group=None):
 
 
 # Widget de sélection du quartier
-selected_neighbourhood_group = st.sidebar.selectbox("Sélectionnez un quartier", df['neighbourhood_group'].unique())
+selected_neighbourhood_group = st.sidebar.selectbox("Sélectionnez un arrondissement", df['neighbourhood_group'].unique())
 
 # Affichage de la carte avec le quartier sélectionné
 display_map(selected_neighbourhood_group)
