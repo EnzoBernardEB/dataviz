@@ -4,7 +4,6 @@ from database.data_loader import df
 
 # Affichage du titre
 st.title("Analyse des données Airbnb de New York pour 2019")
-
 # Métriques
 col1, col2, col3, col4, col5 = st.columns(5)
 
