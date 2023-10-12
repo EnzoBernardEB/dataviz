@@ -15,7 +15,11 @@ st.markdown("""
 
 st.markdown("<h1 style='text-align: center;'>Statistiques Airbnb concernant la ville de New York pour l’année 2019</h1>", unsafe_allow_html=True)
 # Affichage du titre
+<<<<<<< HEAD
 
+=======
+st.title("Analyse des données Airbnb de New York pour 2019")
+>>>>>>> b088e9a204b2f7864ae3fbe0ea6dd46283fc49ae
 # Métriques
 col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
 logement_reserves = (df['availability_365'] <= 15).sum()
